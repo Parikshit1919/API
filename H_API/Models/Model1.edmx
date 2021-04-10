@@ -162,6 +162,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="VIEW_COURSES" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Online_examModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
@@ -369,7 +370,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Online_examEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Online_examEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="Courses" EntityType="Self.Cours" />
           <EntitySet Name="Feedbacks" EntityType="Self.Feedback" />
@@ -401,13 +402,18 @@
             <End Role="Student" EntitySet="Students" />
             <End Role="Result" EntitySet="Results" />
           </AssociationSet>
+          <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
         </EntityContainer>
+        <ComplexType Name="VIEW_COURSES_Result">
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Online_examModelStoreContainer" CdmEntityContainer="Online_examEntities">
+        <EntityContainerMapping StorageEntityContainer="Online_examModelStoreContainer" CdmEntityContainer="Online_examEntities1">
           <EntitySetMapping Name="Admins">
             <EntityTypeMapping TypeName="Online_examModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
@@ -488,6 +494,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="VIEW_COURSES" FunctionName="Online_examModel.Store.VIEW_COURSES">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -12,6 +12,8 @@ namespace H_API.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class Online_examEntities : DbContext
     {
@@ -32,5 +34,10 @@ namespace H_API.Models
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Result> Results { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+    
+        public virtual ObjectResult<VIEW_COURSES_Result> VIEW_COURSES()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_Result>("VIEW_COURSES");
+        }
     }
 }
