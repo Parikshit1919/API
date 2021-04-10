@@ -14,7 +14,7 @@ namespace H_API.Controllers
         //CREATE ENTITIY OBJECT
         Online_examEntities db = new Online_examEntities();
 
-        //METHOD TO GET ADD FEEDBACKS
+        //METHOD TO GET FEEDBACKS
         [HttpGet]
         public IHttpActionResult Get()
         {
@@ -22,6 +22,14 @@ namespace H_API.Controllers
             return Ok(feedbacks);
         }
 
-        //
+        //METHOD TO ADD FEEDBACK
+        [HttpPost]
+        public IHttpActionResult Post(Feedback feedback)
+        {
+            db.Feedbacks.Add(feedback);
+            db.SaveChanges();
+            return Ok("added");
+
+        }
     }
 }
