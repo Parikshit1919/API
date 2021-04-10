@@ -14,11 +14,14 @@ namespace H_API.Controllers
         //CREATE ENTITIY OBJECT
         Online_examEntities db = new Online_examEntities();
 
+        //METHOD TO GET ADD FEEDBACKS
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var feedbacks = db.GET_FEEDBACK(); //CALLING STORED PROCEDURE TO GET FEEDBACK
+            var feedbacks = db.GET_FEEDBACK1(); //CALLING STORED PROCEDURE TO GET FEEDBACK
             return Ok(feedbacks);
         }
+
+        //
     }
 }

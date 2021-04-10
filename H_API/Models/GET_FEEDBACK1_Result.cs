@@ -10,18 +10,14 @@
 namespace H_API.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Feedback
+    public partial class GET_FEEDBACK1_Result
     {
-        public int Feedback_id { get; set; }
         public int s_id { get; set; }
         public string s_name { get; set; }
         public int c_id { get; set; }
-        public string Feedback1 { get; set; }
         public Nullable<decimal> level { get; set; }
-    
-        public virtual Cours Cours { get; set; }
-        public virtual Student Student { get; set; }
+        public string Feedback { get; set; }
+        public string Course_name { get; set; }
     }
 }

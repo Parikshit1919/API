@@ -29,6 +29,7 @@
           <Property Name="s_name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="c_id" Type="int" Nullable="false" />
           <Property Name="Feedback" Type="varchar" MaxLength="100" />
+          <Property Name="level" Type="numeric" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Forgot_Pass">
           <Key>
@@ -162,7 +163,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="GET_FEEDBACK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GET_FEEDBACK1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="VIEW_COURSES" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Online_examModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
@@ -230,6 +231,7 @@
           <Property Name="Feedback1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Cours" Relationship="Self.FK_FeedbackCourses" FromRole="Feedback" ToRole="Courses" />
           <NavigationProperty Name="Student" Relationship="Self.FK_FeedbackStudent" FromRole="Feedback" ToRole="Student" />
+          <Property Name="level" Type="Decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Forgot_Pass">
           <Key>
@@ -404,6 +406,7 @@
           </AssociationSet>
           <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
           <FunctionImport Name="GET_FEEDBACK" ReturnType="Collection(Online_examModel.GET_FEEDBACK_Result)" />
+          <FunctionImport Name="GET_FEEDBACK1" ReturnType="Collection(Online_examModel.GET_FEEDBACK1_Result)" />
         </EntityContainer>
         <ComplexType Name="VIEW_COURSES_Result">
           <Property Type="Int32" Name="course_id" Nullable="false" />
@@ -413,6 +416,14 @@
           <Property Type="Int32" Name="s_id" Nullable="false" />
           <Property Type="String" Name="s_name" Nullable="false" MaxLength="255" />
           <Property Type="Int32" Name="c_id" Nullable="false" />
+          <Property Type="String" Name="Feedback" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="GET_FEEDBACK1_Result">
+          <Property Type="Int32" Name="s_id" Nullable="false" />
+          <Property Type="String" Name="s_name" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="c_id" Nullable="false" />
+          <Property Type="Decimal" Name="level" Nullable="true" Precision="18" Scale="0" />
           <Property Type="String" Name="Feedback" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
         </ComplexType>
@@ -442,6 +453,7 @@
           <EntitySetMapping Name="Feedbacks">
             <EntityTypeMapping TypeName="Online_examModel.Feedback">
               <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="level" ColumnName="level" />
                 <ScalarProperty Name="Feedback_id" ColumnName="Feedback_id" />
                 <ScalarProperty Name="s_id" ColumnName="s_id" />
                 <ScalarProperty Name="s_name" ColumnName="s_name" />
@@ -510,12 +522,13 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GET_FEEDBACK" FunctionName="Online_examModel.Store.GET_FEEDBACK">
+          <FunctionImportMapping FunctionImportName="GET_FEEDBACK1" FunctionName="Online_examModel.Store.GET_FEEDBACK1">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.GET_FEEDBACK_Result">
+              <ComplexTypeMapping TypeName="Online_examModel.GET_FEEDBACK1_Result">
                 <ScalarProperty Name="s_id" ColumnName="s_id" />
                 <ScalarProperty Name="s_name" ColumnName="s_name" />
                 <ScalarProperty Name="c_id" ColumnName="c_id" />
+                <ScalarProperty Name="level" ColumnName="level" />
                 <ScalarProperty Name="Feedback" ColumnName="Feedback" />
                 <ScalarProperty Name="Course_name" ColumnName="Course_name" />
               </ComplexTypeMapping>
