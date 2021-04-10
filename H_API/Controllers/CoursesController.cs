@@ -40,16 +40,20 @@ namespace H_API.Controllers
             }
         }
 
+        //METHOD TO DELETE COURSES
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
+            //FIND THE REQUESTED COURSE
             var course = db.Courses.Find(id);
+            //DELTE IF IT EXISTS
             if (course!=null)
             {
                 db.Courses.Remove(course);
                 db.SaveChanges();
                 return Ok("removed");
             }
+            //ELSE RETURN ERROR
             else
             {
                 return Ok("course_error");

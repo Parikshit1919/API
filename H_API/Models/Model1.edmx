@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_id" />
@@ -162,6 +162,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GET_FEEDBACK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="VIEW_COURSES" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Online_examModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
@@ -196,8 +197,7 @@
             <End Role="Result" EntitySet="Result" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Online_examModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -403,10 +403,18 @@
             <End Role="Result" EntitySet="Results" />
           </AssociationSet>
           <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
+          <FunctionImport Name="GET_FEEDBACK" ReturnType="Collection(Online_examModel.GET_FEEDBACK_Result)" />
         </EntityContainer>
         <ComplexType Name="VIEW_COURSES_Result">
           <Property Type="Int32" Name="course_id" Nullable="false" />
           <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="GET_FEEDBACK_Result">
+          <Property Type="Int32" Name="s_id" Nullable="false" />
+          <Property Type="String" Name="s_name" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="c_id" Nullable="false" />
+          <Property Type="String" Name="Feedback" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -499,6 +507,17 @@
               <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
                 <ScalarProperty Name="course_id" ColumnName="course_id" />
                 <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GET_FEEDBACK" FunctionName="Online_examModel.Store.GET_FEEDBACK">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.GET_FEEDBACK_Result">
+                <ScalarProperty Name="s_id" ColumnName="s_id" />
+                <ScalarProperty Name="s_name" ColumnName="s_name" />
+                <ScalarProperty Name="c_id" ColumnName="c_id" />
+                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

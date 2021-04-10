@@ -39,5 +39,10 @@ namespace H_API.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_Result>("VIEW_COURSES");
         }
+    
+        public virtual ObjectResult<GET_FEEDBACK_Result> GET_FEEDBACK()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_FEEDBACK_Result>("GET_FEEDBACK");
+        }
     }
 }
