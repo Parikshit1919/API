@@ -31,7 +31,7 @@ namespace H_API.Controllers
             {
                 db.Courses.Add(course);
                 db.SaveChanges();
-                return Ok("added!");
+                return Ok("added");
             }
             //RETURN EXISITS IF IT AREADY EXISTS
             else 
@@ -56,7 +56,7 @@ namespace H_API.Controllers
             //ELSE RETURN ERROR
             else
             {
-                return Ok("course_error");
+                return Ok(" ");
             }
         }
     }
