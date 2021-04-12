@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_id" />
@@ -186,6 +186,7 @@
         </Association>
         <Function Name="GET_FEEDBACK1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="VIEW_COURSES" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="View_Exams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Online_examModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
@@ -224,8 +225,7 @@
             <End Role="Result" EntitySet="Result" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Online_examModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -461,6 +461,7 @@
           </AssociationSet>
           <FunctionImport Name="GET_FEEDBACK1" ReturnType="Collection(Online_examModel.GET_FEEDBACK1_Result)" />
           <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
+          <FunctionImport Name="View_Exams" ReturnType="Collection(Online_examModel.View_Exams_Result)" />
         </EntityContainer>
         <ComplexType Name="GET_FEEDBACK1_Result">
           <Property Type="Int32" Name="s_id" Nullable="false" />
@@ -473,6 +474,13 @@
         <ComplexType Name="VIEW_COURSES_Result">
           <Property Type="Int32" Name="course_id" Nullable="false" />
           <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="View_Exams_Result">
+          <Property Type="Int32" Name="Course_id" Nullable="true" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="Exam_id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+          <Property Type="Int32" Name="time" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -586,6 +594,17 @@
               <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
                 <ScalarProperty Name="course_id" ColumnName="course_id" />
                 <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="View_Exams" FunctionName="Online_examModel.Store.View_Exams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Exams_Result">
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="level" ColumnName="level" />
+                <ScalarProperty Name="time" ColumnName="time" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
