@@ -59,5 +59,10 @@ namespace H_API.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Results_ByExam_Result>("View_Results_ByExam", e_idParameter);
         }
+    
+        public virtual ObjectResult<ViewAll_Results_ByExam_Result> ViewAll_Results_ByExam()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ViewAll_Results_ByExam_Result>("ViewAll_Results_ByExam");
+        }
     }
 }
