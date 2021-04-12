@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_id" />
@@ -19,6 +19,15 @@
           </Key>
           <Property Name="Course_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Course_name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Exams">
+          <Key>
+            <PropertyRef Name="Exam_id" />
+          </Key>
+          <Property Name="Exam_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Course_id" Type="int" />
+          <Property Name="Level" Type="int" />
+          <Property Name="Time" Type="int" />
         </EntityType>
         <EntityType Name="Feedback">
           <Key>
@@ -51,18 +60,16 @@
           <Property Name="Option3" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Option4" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Correct_ans" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="c_id" Type="int" Nullable="false" />
-          <Property Name="Level" Type="int" Nullable="false" />
+          <Property Name="e_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
         <EntityType Name="Result">
           <Key>
             <PropertyRef Name="Result_id" />
           </Key>
           <Property Name="Result_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Level" Type="int" Nullable="false" />
           <Property Name="Result" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="s_id" Type="int" Nullable="false" />
-          <Property Name="c_id" Type="int" Nullable="false" />
+          <Property Name="e_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -79,6 +86,20 @@
           <Property Name="Qualification" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Year_of_completion" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="fk">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Exams" Type="Self.Exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Course_id" />
+            </Principal>
+            <Dependent Role="Exams">
+              <PropertyRef Name="Course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FeedbackCourses">
           <End Role="Courses" Type="Self.Courses" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -122,30 +143,30 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionExam">
-          <End Role="Courses" Type="Self.Courses" Multiplicity="1">
+          <End Role="Exams" Type="Self.Exams" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Questions" Type="Self.Questions" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Courses">
-              <PropertyRef Name="Course_id" />
+            <Principal Role="Exams">
+              <PropertyRef Name="Exam_id" />
             </Principal>
             <Dependent Role="Questions">
-              <PropertyRef Name="c_id" />
+              <PropertyRef Name="e_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ResultExam">
-          <End Role="Courses" Type="Self.Courses" Multiplicity="1">
+          <End Role="Exams" Type="Self.Exams" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Result" Type="Self.Result" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Courses">
-              <PropertyRef Name="Course_id" />
+            <Principal Role="Exams">
+              <PropertyRef Name="Exam_id" />
             </Principal>
             <Dependent Role="Result">
-              <PropertyRef Name="c_id" />
+              <PropertyRef Name="e_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -168,11 +189,16 @@
         <EntityContainer Name="Online_examModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Exams" EntityType="Self.Exams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Forgot_Pass" EntityType="Self.Forgot_Pass" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk" Association="Self.fk">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Exams" EntitySet="Exams" />
+          </AssociationSet>
           <AssociationSet Name="FK_FeedbackCourses" Association="Self.FK_FeedbackCourses">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Feedback" EntitySet="Feedback" />
@@ -186,11 +212,11 @@
             <End Role="Forgot_Pass" EntitySet="Forgot_Pass" />
           </AssociationSet>
           <AssociationSet Name="FK_QuestionExam" Association="Self.FK_QuestionExam">
-            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Exams" EntitySet="Exams" />
             <End Role="Questions" EntitySet="Questions" />
           </AssociationSet>
           <AssociationSet Name="FK_ResultExam" Association="Self.FK_ResultExam">
-            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Exams" EntitySet="Exams" />
             <End Role="Result" EntitySet="Result" />
           </AssociationSet>
           <AssociationSet Name="FK_ResultStudent" Association="Self.FK_ResultStudent">
@@ -198,7 +224,8 @@
             <End Role="Result" EntitySet="Result" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Online_examModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -216,9 +243,20 @@
           </Key>
           <Property Name="Course_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Course_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Exams" Relationship="Self.fk" FromRole="Courses" ToRole="Exams" />
           <NavigationProperty Name="Feedbacks" Relationship="Self.FK_FeedbackCourses" FromRole="Courses" ToRole="Feedback" />
-          <NavigationProperty Name="Questions" Relationship="Self.FK_QuestionExam" FromRole="Courses" ToRole="Questions" />
-          <NavigationProperty Name="Results" Relationship="Self.FK_ResultExam" FromRole="Courses" ToRole="Result" />
+        </EntityType>
+        <EntityType Name="Exam">
+          <Key>
+            <PropertyRef Name="Exam_id" />
+          </Key>
+          <Property Name="Exam_id" Type="Decimal" Precision="18" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Course_id" Type="Int32" />
+          <Property Name="Level" Type="Int32" />
+          <Property Name="Time" Type="Int32" />
+          <NavigationProperty Name="Cours" Relationship="Self.fk" FromRole="Exams" ToRole="Courses" />
+          <NavigationProperty Name="Questions" Relationship="Self.FK_QuestionExam" FromRole="Exams" ToRole="Questions" />
+          <NavigationProperty Name="Results" Relationship="Self.FK_ResultExam" FromRole="Exams" ToRole="Result" />
         </EntityType>
         <EntityType Name="Feedback">
           <Key>
@@ -229,9 +267,9 @@
           <Property Name="s_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="c_id" Type="Int32" Nullable="false" />
           <Property Name="Feedback1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="level" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Cours" Relationship="Self.FK_FeedbackCourses" FromRole="Feedback" ToRole="Courses" />
           <NavigationProperty Name="Student" Relationship="Self.FK_FeedbackStudent" FromRole="Feedback" ToRole="Student" />
-          <Property Name="level" Type="Decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Forgot_Pass">
           <Key>
@@ -254,20 +292,18 @@
           <Property Name="Option3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Option4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Correct_ans" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="c_id" Type="Int32" Nullable="false" />
-          <Property Name="Level" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Cours" Relationship="Self.FK_QuestionExam" FromRole="Questions" ToRole="Courses" />
+          <Property Name="e_id" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Exam" Relationship="Self.FK_QuestionExam" FromRole="Questions" ToRole="Exams" />
         </EntityType>
         <EntityType Name="Result">
           <Key>
             <PropertyRef Name="Result_id" />
           </Key>
           <Property Name="Result_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Level" Type="Int32" Nullable="false" />
           <Property Name="Result1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="s_id" Type="Int32" Nullable="false" />
-          <Property Name="c_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Cours" Relationship="Self.FK_ResultExam" FromRole="Result" ToRole="Courses" />
+          <Property Name="e_id" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Exam" Relationship="Self.FK_ResultExam" FromRole="Result" ToRole="Exams" />
           <NavigationProperty Name="Student" Relationship="Self.FK_ResultStudent" FromRole="Result" ToRole="Student" />
         </EntityType>
         <EntityType Name="Student">
@@ -288,6 +324,20 @@
           <NavigationProperty Name="Forgot_Pass" Relationship="Self.FK_ForgotPassStudent" FromRole="Student" ToRole="Forgot_Pass" />
           <NavigationProperty Name="Results" Relationship="Self.FK_ResultStudent" FromRole="Student" ToRole="Result" />
         </EntityType>
+        <Association Name="fk">
+          <End Role="Courses" Type="Self.Cours" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Exams" Type="Self.Exam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Course_id" />
+            </Principal>
+            <Dependent Role="Exams">
+              <PropertyRef Name="Course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FeedbackCourses">
           <End Role="Courses" Type="Self.Cours" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -303,30 +353,30 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_QuestionExam">
-          <End Role="Courses" Type="Self.Cours" Multiplicity="1">
+          <End Role="Exams" Type="Self.Exam" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Questions" Type="Self.Question" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Courses">
-              <PropertyRef Name="Course_id" />
+            <Principal Role="Exams">
+              <PropertyRef Name="Exam_id" />
             </Principal>
             <Dependent Role="Questions">
-              <PropertyRef Name="c_id" />
+              <PropertyRef Name="e_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ResultExam">
-          <End Role="Courses" Type="Self.Cours" Multiplicity="1">
+          <End Role="Exams" Type="Self.Exam" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Result" Type="Self.Result" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Courses">
-              <PropertyRef Name="Course_id" />
+            <Principal Role="Exams">
+              <PropertyRef Name="Exam_id" />
             </Principal>
             <Dependent Role="Result">
-              <PropertyRef Name="c_id" />
+              <PropertyRef Name="e_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -375,21 +425,26 @@
         <EntityContainer Name="Online_examEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="Courses" EntityType="Self.Cours" />
+          <EntitySet Name="Exams" EntityType="Self.Exam" />
           <EntitySet Name="Feedbacks" EntityType="Self.Feedback" />
           <EntitySet Name="Forgot_Pass" EntityType="Self.Forgot_Pass" />
           <EntitySet Name="Questions" EntityType="Self.Question" />
           <EntitySet Name="Results" EntityType="Self.Result" />
           <EntitySet Name="Students" EntityType="Self.Student" />
+          <AssociationSet Name="fk" Association="Self.fk">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Exams" EntitySet="Exams" />
+          </AssociationSet>
           <AssociationSet Name="FK_FeedbackCourses" Association="Self.FK_FeedbackCourses">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Feedback" EntitySet="Feedbacks" />
           </AssociationSet>
           <AssociationSet Name="FK_QuestionExam" Association="Self.FK_QuestionExam">
-            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Exams" EntitySet="Exams" />
             <End Role="Questions" EntitySet="Questions" />
           </AssociationSet>
           <AssociationSet Name="FK_ResultExam" Association="Self.FK_ResultExam">
-            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Exams" EntitySet="Exams" />
             <End Role="Result" EntitySet="Results" />
           </AssociationSet>
           <AssociationSet Name="FK_FeedbackStudent" Association="Self.FK_FeedbackStudent">
@@ -404,21 +459,9 @@
             <End Role="Student" EntitySet="Students" />
             <End Role="Result" EntitySet="Results" />
           </AssociationSet>
-          <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
-          <FunctionImport Name="GET_FEEDBACK" ReturnType="Collection(Online_examModel.GET_FEEDBACK_Result)" />
           <FunctionImport Name="GET_FEEDBACK1" ReturnType="Collection(Online_examModel.GET_FEEDBACK1_Result)" />
+          <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
         </EntityContainer>
-        <ComplexType Name="VIEW_COURSES_Result">
-          <Property Type="Int32" Name="course_id" Nullable="false" />
-          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
-        </ComplexType>
-        <ComplexType Name="GET_FEEDBACK_Result">
-          <Property Type="Int32" Name="s_id" Nullable="false" />
-          <Property Type="String" Name="s_name" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="c_id" Nullable="false" />
-          <Property Type="String" Name="Feedback" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
-        </ComplexType>
         <ComplexType Name="GET_FEEDBACK1_Result">
           <Property Type="Int32" Name="s_id" Nullable="false" />
           <Property Type="String" Name="s_name" Nullable="false" MaxLength="255" />
@@ -426,6 +469,10 @@
           <Property Type="Decimal" Name="level" Nullable="true" Precision="18" Scale="0" />
           <Property Type="String" Name="Feedback" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="VIEW_COURSES_Result">
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -450,15 +497,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Exams">
+            <EntityTypeMapping TypeName="Online_examModel.Exam">
+              <MappingFragment StoreEntitySet="Exams">
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Feedbacks">
             <EntityTypeMapping TypeName="Online_examModel.Feedback">
               <MappingFragment StoreEntitySet="Feedback">
-                <ScalarProperty Name="level" ColumnName="level" />
                 <ScalarProperty Name="Feedback_id" ColumnName="Feedback_id" />
                 <ScalarProperty Name="s_id" ColumnName="s_id" />
                 <ScalarProperty Name="s_name" ColumnName="s_name" />
                 <ScalarProperty Name="c_id" ColumnName="c_id" />
                 <ScalarProperty Name="Feedback1" ColumnName="Feedback" />
+                <ScalarProperty Name="level" ColumnName="level" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -482,8 +539,7 @@
                 <ScalarProperty Name="Option3" ColumnName="Option3" />
                 <ScalarProperty Name="Option4" ColumnName="Option4" />
                 <ScalarProperty Name="Correct_ans" ColumnName="Correct_ans" />
-                <ScalarProperty Name="c_id" ColumnName="c_id" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="e_id" ColumnName="e_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -491,10 +547,9 @@
             <EntityTypeMapping TypeName="Online_examModel.Result">
               <MappingFragment StoreEntitySet="Result">
                 <ScalarProperty Name="Result_id" ColumnName="Result_id" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
                 <ScalarProperty Name="Result1" ColumnName="Result" />
                 <ScalarProperty Name="s_id" ColumnName="s_id" />
-                <ScalarProperty Name="c_id" ColumnName="c_id" />
+                <ScalarProperty Name="e_id" ColumnName="e_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -514,14 +569,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="VIEW_COURSES" FunctionName="Online_examModel.Store.VIEW_COURSES">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
-                <ScalarProperty Name="course_id" ColumnName="course_id" />
-                <ScalarProperty Name="course_name" ColumnName="course_name" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GET_FEEDBACK1" FunctionName="Online_examModel.Store.GET_FEEDBACK1">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Online_examModel.GET_FEEDBACK1_Result">
@@ -531,6 +578,14 @@
                 <ScalarProperty Name="level" ColumnName="level" />
                 <ScalarProperty Name="Feedback" ColumnName="Feedback" />
                 <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VIEW_COURSES" FunctionName="Online_examModel.Store.VIEW_COURSES">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

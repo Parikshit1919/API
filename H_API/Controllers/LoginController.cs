@@ -11,7 +11,7 @@ namespace H_API.Controllers
     public class LoginController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities db = new Online_examEntities();
+        Online_examEntities1 db = new Online_examEntities1();
 
         //METHOD TO CHECK FOR STUDENT LOGIN CREDENTIALS
         [HttpPost]

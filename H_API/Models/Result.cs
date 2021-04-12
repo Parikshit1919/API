@@ -15,12 +15,11 @@ namespace H_API.Models
     public partial class Result
     {
         public int Result_id { get; set; }
-        public int Level { get; set; }
         public string Result1 { get; set; }
         public int s_id { get; set; }
-        public int c_id { get; set; }
+        public decimal e_id { get; set; }
     
-        public virtual Cours Cours { get; set; }
+        public virtual Exam Exam { get; set; }
         public virtual Student Student { get; set; }
     }
 }

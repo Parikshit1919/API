@@ -12,7 +12,7 @@ namespace H_API.Controllers
     public class FeedBackController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities db = new Online_examEntities();
+        Online_examEntities1 db = new Online_examEntities1();
 
         //METHOD TO GET FEEDBACKS
         [HttpGet]

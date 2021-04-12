@@ -11,7 +11,7 @@ namespace H_API.Controllers
     public class CoursesController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities db = new Online_examEntities();
+        Online_examEntities1 db = new Online_examEntities1();
 
         //METHOD TO GET ALL COURSES IN THE COURSES TABLE
         [HttpGet]
@@ -56,7 +56,7 @@ namespace H_API.Controllers
             //ELSE RETURN ERROR
             else
             {
-                return Ok(" ");
+                return Ok("not_found");
             }
         }
     }

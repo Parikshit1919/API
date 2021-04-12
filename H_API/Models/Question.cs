@@ -21,9 +21,8 @@ namespace H_API.Models
         public string Option3 { get; set; }
         public string Option4 { get; set; }
         public string Correct_ans { get; set; }
-        public int c_id { get; set; }
-        public int Level { get; set; }
+        public decimal e_id { get; set; }
     
-        public virtual Cours Cours { get; set; }
+        public virtual Exam Exam { get; set; }
     }
 }

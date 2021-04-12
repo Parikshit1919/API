@@ -12,21 +12,24 @@ namespace H_API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Cours
+    public partial class Exam
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Cours()
+        public Exam()
         {
-            this.Exams = new HashSet<Exam>();
-            this.Feedbacks = new HashSet<Feedback>();
+            this.Questions = new HashSet<Question>();
+            this.Results = new HashSet<Result>();
         }
     
-        public int Course_id { get; set; }
-        public string Course_name { get; set; }
+        public decimal Exam_id { get; set; }
+        public Nullable<int> Course_id { get; set; }
+        public Nullable<int> Level { get; set; }
+        public Nullable<int> Time { get; set; }
     
+        public virtual Cours Cours { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Exam> Exams { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Feedback> Feedbacks { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
     }
 }
