@@ -26,9 +26,21 @@ namespace H_API.Controllers
         [HttpPost]
         public IHttpActionResult Post(Feedback feedback)
         {
-            db.Feedbacks.Add(feedback);
+             //CHECK IF FEEDBACK ALREADY EXISTS
+            var check = db.Feedbacks.Where(f => f.c_id == feedback.c_id && f.level==feedback.level && f.s_name==feedback.s_name).FirstOrDefault();
+            //IF FEEDBACK NOT EXISTS ADD NEW RECORD
+            if (check == null)
+            {
+                db.Feedbacks.Add(feedback);
             db.SaveChanges();
             return Ok("added");
+            }
+            // ELSE RETURN ALREADY EXISTS
+            else
+            {
+                return Ok("exists");
+            }
+
 
         }
     }
