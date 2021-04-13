@@ -26,6 +26,12 @@ namespace H_API.Controllers
         [HttpPost]
         public IHttpActionResult Post(Feedback feedback)
         {
+            //CHECK IF STUDENT IS TRYING TO GIVE FEEDBACK FOR AN EAM WHICH HE HAS NOT GIVIN
+            var check = db.Results.Where(a => a.e_id == feedback.e_id && a.s_id == feedback.s_id).FirstOrDefault();
+            if(check==null)
+            {
+                return Ok("error");
+            }
             try
             {
                 db.Feedbacks.Add(feedback);
