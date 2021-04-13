@@ -189,6 +189,9 @@
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <Function Name="View_Exams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="View_Exams_BYID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
         <Function Name="View_Results_ByExam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="e_id" Type="int" Mode="In" />
         </Function>
@@ -472,6 +475,9 @@
           </FunctionImport>
           <FunctionImport Name="ViewAll_Results_ByExam" ReturnType="Collection(Online_examModel.ViewAll_Results_ByExam_Result)" />
           <FunctionImport Name="VIEW_COURSES_BYID" ReturnType="Collection(Online_examModel.VIEW_COURSES_BYID_Result)">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="View_Exams_BYID" ReturnType="Collection(Online_examModel.View_Exams_BYID_Result)">
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
@@ -515,6 +521,13 @@
         <ComplexType Name="VIEW_COURSES_BYID_Result">
           <Property Type="Int32" Name="course_id" Nullable="false" />
           <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="View_Exams_BYID_Result">
+          <Property Type="Int32" Name="Course_id" Nullable="true" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="Exam_id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+          <Property Type="Int32" Name="time" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -672,6 +685,17 @@
               <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_BYID_Result">
                 <ScalarProperty Name="course_id" ColumnName="course_id" />
                 <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="View_Exams_BYID" FunctionName="Online_examModel.Store.View_Exams_BYID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Exams_BYID_Result">
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="level" ColumnName="level" />
+                <ScalarProperty Name="time" ColumnName="time" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

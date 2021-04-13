@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -37,6 +38,34 @@ namespace H_API.Controllers
             }
             
         }
+
+        //METHOD TO GET EXAM BY ID
+        [Route("api/ExamsByID")]
+        [HttpGet]
+        public IHttpActionResult Get(int id)
+        {
+            return Ok(db.View_Exams_BYID(id).FirstOrDefault());
+        }
+         
+        
+        //METHOD TO MODIFY EXAM
+        [HttpPut]
+        public IHttpActionResult Put(Exam exam)
+        {
+            try
+            {
+                db.Entry(exam).State = EntityState.Modified;
+                db.SaveChanges();
+                return Ok("changed");
+            }
+            catch (Exception e)
+            {
+                return Ok("error");
+            }
+        }
+    
+
+
         //METHOD TO DELETE EXAMS
         [HttpDelete]
         public IHttpActionResult Delete(int id)

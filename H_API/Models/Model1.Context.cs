@@ -73,5 +73,14 @@ namespace H_API.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_BYID_Result>("VIEW_COURSES_BYID", idParameter);
         }
+    
+        public virtual ObjectResult<View_Exams_BYID_Result> View_Exams_BYID(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Exams_BYID_Result>("View_Exams_BYID", idParameter);
+        }
     }
 }
