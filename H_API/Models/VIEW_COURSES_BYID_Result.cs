@@ -11,13 +11,9 @@ namespace H_API.Models
 {
     using System;
     
-    public partial class GET_FEEDBACK1_Result
+    public partial class VIEW_COURSES_BYID_Result
     {
-        public int s_id { get; set; }
-        public string s_name { get; set; }
-        public decimal e_id { get; set; }
-        public string Course_name { get; set; }
-        public Nullable<int> level { get; set; }
-        public string feedback { get; set; }
+        public int course_id { get; set; }
+        public string course_name { get; set; }
     }
 }

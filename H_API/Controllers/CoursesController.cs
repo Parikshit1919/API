@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +12,7 @@ namespace H_API.Controllers
     public class CoursesController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities1 db = new Online_examEntities1();
+        Online_examEntities db = new Online_examEntities();
 
         //METHOD TO GET ALL COURSES IN THE COURSES TABLE
         [HttpGet]
@@ -19,6 +20,15 @@ namespace H_API.Controllers
         {
             var courses = db.VIEW_COURSES(); //CALLING STORED PROCEDURE
             return Ok(courses);
+        }
+
+        //METHOD TO GET BY ID
+        [Route("api/CoursesByID")]
+        [HttpGet]
+        public IHttpActionResult Get(int id)
+        {
+
+            return Ok(db.VIEW_COURSES_BYID(id).FirstOrDefault());
         }
 
         //METHOD TO ADD NEW COURSES
@@ -40,6 +50,21 @@ namespace H_API.Controllers
             }
         }
 
+        //METHOD TO MODIFY COURSES
+        [HttpPut]
+        public IHttpActionResult Put(Cours course)
+        {
+            try
+            {
+                db.Entry(course).State = EntityState.Modified;
+                db.SaveChanges();
+                return Ok("changed");
+            }
+            catch (Exception e)
+            {
+                return Ok("error");
+            }
+        }
         //METHOD TO DELETE COURSES
         [HttpDelete]
         public IHttpActionResult Delete(int id)

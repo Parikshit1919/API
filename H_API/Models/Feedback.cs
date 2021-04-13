@@ -17,11 +17,10 @@ namespace H_API.Models
         public int Feedback_id { get; set; }
         public int s_id { get; set; }
         public string s_name { get; set; }
-        public int c_id { get; set; }
+        public decimal e_id { get; set; }
         public string Feedback1 { get; set; }
-        public Nullable<decimal> level { get; set; }
     
-        public virtual Cours Cours { get; set; }
+        public virtual Exam Exam { get; set; }
         public virtual Student Student { get; set; }
     }
 }

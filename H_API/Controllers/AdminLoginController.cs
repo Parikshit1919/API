@@ -10,7 +10,7 @@ namespace H_API.Controllers
     public class AdminLoginController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities1 db = new Online_examEntities1();
+        Online_examEntities db = new Online_examEntities();
 
         [HttpPost]
         public IHttpActionResult Post(Admin admin)

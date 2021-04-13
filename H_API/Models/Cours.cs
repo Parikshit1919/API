@@ -18,7 +18,6 @@ namespace H_API.Models
         public Cours()
         {
             this.Exams = new HashSet<Exam>();
-            this.Feedbacks = new HashSet<Feedback>();
         }
     
         public int Course_id { get; set; }
@@ -26,7 +25,5 @@ namespace H_API.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Exam> Exams { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Feedback> Feedbacks { get; set; }
     }
 }

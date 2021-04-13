@@ -11,7 +11,7 @@ namespace H_API.Controllers
     public class RegistrationController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities1 db = new Online_examEntities1();
+        Online_examEntities db = new Online_examEntities();
 
         //METHOD TO ADD NEW RECORDS INTO STUDENT TABLE
         [HttpPost]

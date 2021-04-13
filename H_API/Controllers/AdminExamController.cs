@@ -11,8 +11,9 @@ namespace H_API.Controllers
     public class AdminExamController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities1 db = new Online_examEntities1();
+        Online_examEntities db = new Online_examEntities();
 
+        //METHOD TO GET ALL EXAMS
         [HttpGet]
         public IHttpActionResult Get()
         {
@@ -20,6 +21,23 @@ namespace H_API.Controllers
             return Ok(exams);
         }
 
+        //METHOD TO ADD EXAMS
+        [HttpPost]
+        public IHttpActionResult Post(Exam exam)
+        {
+            try
+            {
+                db.Exams.Add(exam);
+                db.SaveChanges();
+                return Ok("added");
+            }
+            catch (Exception e) 
+            {
+                return Ok("error");
+            }
+            
+        }
+        //METHOD TO DELETE EXAMS
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {

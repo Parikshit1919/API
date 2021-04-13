@@ -12,7 +12,7 @@ namespace H_API.Controllers
     public class FeedBackController : ApiController
     {
         //CREATE ENTITIY OBJECT
-        Online_examEntities1 db = new Online_examEntities1();
+        Online_examEntities db = new Online_examEntities();
 
         //METHOD TO GET FEEDBACKS
         [HttpGet]
@@ -26,10 +26,17 @@ namespace H_API.Controllers
         [HttpPost]
         public IHttpActionResult Post(Feedback feedback)
         {
-            db.Feedbacks.Add(feedback);
-            db.SaveChanges();
-            return Ok("added");
-
+            try
+            {
+                db.Feedbacks.Add(feedback);
+                db.SaveChanges();
+                return Ok("added");
+            }
+ 
+            catch(Exception e)
+            {
+                return Ok("error");
+            }
         }
     }
 }

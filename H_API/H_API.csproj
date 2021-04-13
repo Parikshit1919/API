@@ -225,6 +225,9 @@
     <Compile Include="Models\ViewAll_Results_ByExam_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VIEW_COURSES_BYID_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\VIEW_COURSES_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
