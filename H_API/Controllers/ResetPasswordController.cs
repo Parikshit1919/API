@@ -20,6 +20,14 @@ namespace H_API.Controllers
         public IHttpActionResult Get(string email)
         {
             var check = db.Students.Where(a => a.Student_Email == email).FirstOrDefault();
+            //CHECK FOR ANY PREVIOUS RESETS
+            var check_reset = db.Forgot_Pass.Where(a => a.s_email == email).FirstOrDefault();
+            //REMOVE THEM IF NEEDED
+            if(check_reset!=null)
+            {
+                db.Forgot_Pass.Remove(check_reset);
+                db.SaveChanges();
+            }
             System.Random random = new System.Random();
             if (check!=null)
             {
