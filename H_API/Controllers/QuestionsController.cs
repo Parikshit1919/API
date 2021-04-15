@@ -52,7 +52,7 @@ namespace H_API.Controllers
         [HttpGet]
         public IHttpActionResult get(int id)
         {
-            var question = db.View_Questions_ByID(id);
+            var question = db.View_Questions_ByID(id).FirstOrDefault();
             if (question != null)
             {
                 return Ok(question);
