@@ -35,52 +35,11 @@ namespace H_API.Models
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Result> Results { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     
         public virtual ObjectResult<GET_FEEDBACK1_Result> GET_FEEDBACK1()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GET_FEEDBACK1_Result>("GET_FEEDBACK1");
-        }
-    
-        public virtual ObjectResult<VIEW_COURSES_Result> VIEW_COURSES()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_Result>("VIEW_COURSES");
-        }
-    
-        public virtual ObjectResult<View_Exams_Result> View_Exams()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Exams_Result>("View_Exams");
-        }
-    
-        public virtual ObjectResult<View_Results_ByExam_Result> View_Results_ByExam(Nullable<int> e_id)
-        {
-            var e_idParameter = e_id.HasValue ?
-                new ObjectParameter("e_id", e_id) :
-                new ObjectParameter("e_id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Results_ByExam_Result>("View_Results_ByExam", e_idParameter);
-        }
-    
-        public virtual ObjectResult<ViewAll_Results_ByExam_Result> ViewAll_Results_ByExam()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ViewAll_Results_ByExam_Result>("ViewAll_Results_ByExam");
-        }
-    
-        public virtual ObjectResult<VIEW_COURSES_BYID_Result> VIEW_COURSES_BYID(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_BYID_Result>("VIEW_COURSES_BYID", idParameter);
-        }
-    
-        public virtual ObjectResult<View_Exams_BYID_Result> View_Exams_BYID(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Exams_BYID_Result>("View_Exams_BYID", idParameter);
         }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
@@ -186,6 +145,39 @@ namespace H_API.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
     
+        public virtual ObjectResult<View_Analytics_Result> View_Analytics()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Analytics_Result>("View_Analytics");
+        }
+    
+        public virtual ObjectResult<VIEW_COURSES_Result> VIEW_COURSES()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_Result>("VIEW_COURSES");
+        }
+    
+        public virtual ObjectResult<VIEW_COURSES_BYID_Result> VIEW_COURSES_BYID(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VIEW_COURSES_BYID_Result>("VIEW_COURSES_BYID", idParameter);
+        }
+    
+        public virtual ObjectResult<View_Exams_Result> View_Exams()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Exams_Result>("View_Exams");
+        }
+    
+        public virtual ObjectResult<View_Exams_BYID_Result> View_Exams_BYID(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Exams_BYID_Result>("View_Exams_BYID", idParameter);
+        }
+    
         public virtual ObjectResult<View_Questions_ByExam_Result> View_Questions_ByExam(Nullable<int> id)
         {
             var idParameter = id.HasValue ?
@@ -202,6 +194,20 @@ namespace H_API.Models
                 new ObjectParameter("id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Questions_ByID_Result>("View_Questions_ByID", idParameter);
+        }
+    
+        public virtual ObjectResult<View_Results_ByExam_Result> View_Results_ByExam(Nullable<int> e_id)
+        {
+            var e_idParameter = e_id.HasValue ?
+                new ObjectParameter("e_id", e_id) :
+                new ObjectParameter("e_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Results_ByExam_Result>("View_Results_ByExam", e_idParameter);
+        }
+    
+        public virtual ObjectResult<ViewAll_Results_ByExam_Result> ViewAll_Results_ByExam()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ViewAll_Results_ByExam_Result>("ViewAll_Results_ByExam");
         }
     }
 }

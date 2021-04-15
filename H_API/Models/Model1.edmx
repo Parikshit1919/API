@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Online_examModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_id" />
@@ -84,6 +84,16 @@
           <Property Name="State" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Qualification" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Year_of_completion" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="fk">
           <End Role="Courses" Type="Self.Courses" Multiplicity="0..1">
@@ -215,6 +225,7 @@
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="View_Analytics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="VIEW_COURSES" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="VIEW_COURSES_BYID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id" Type="int" Mode="In" />
@@ -242,6 +253,7 @@
           <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fk" Association="Self.fk">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Exams" EntitySet="Exams" />
@@ -271,7 +283,8 @@
             <End Role="Result" EntitySet="Result" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Online_examModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -368,6 +381,16 @@
           <NavigationProperty Name="Feedbacks" Relationship="Self.FK_FeedbackStudent" FromRole="Student" ToRole="Feedback" />
           <NavigationProperty Name="Forgot_Pass" Relationship="Self.FK_ForgotPassStudent" FromRole="Student" ToRole="Forgot_Pass" />
           <NavigationProperty Name="Results" Relationship="Self.FK_ResultStudent" FromRole="Student" ToRole="Result" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="fk">
           <End Role="Courses" Type="Self.Cours" Multiplicity="0..1">
@@ -467,7 +490,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Online_examEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Online_examEntities3" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="Courses" EntityType="Self.Cours" />
           <EntitySet Name="Exams" EntityType="Self.Exam" />
@@ -476,6 +499,7 @@
           <EntitySet Name="Questions" EntityType="Self.Question" />
           <EntitySet Name="Results" EntityType="Self.Result" />
           <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <AssociationSet Name="fk" Association="Self.fk">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Exams" EntitySet="Exams" />
@@ -505,18 +529,6 @@
             <End Role="Result" EntitySet="Results" />
           </AssociationSet>
           <FunctionImport Name="GET_FEEDBACK1" ReturnType="Collection(Online_examModel.GET_FEEDBACK1_Result)" />
-          <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
-          <FunctionImport Name="View_Exams" ReturnType="Collection(Online_examModel.View_Exams_Result)" />
-          <FunctionImport Name="View_Results_ByExam" ReturnType="Collection(Online_examModel.View_Results_ByExam_Result)">
-          <Parameter Name="e_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="ViewAll_Results_ByExam" ReturnType="Collection(Online_examModel.ViewAll_Results_ByExam_Result)" />
-          <FunctionImport Name="VIEW_COURSES_BYID" ReturnType="Collection(Online_examModel.VIEW_COURSES_BYID_Result)">
-          <Parameter Name="id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="View_Exams_BYID" ReturnType="Collection(Online_examModel.View_Exams_BYID_Result)">
-          <Parameter Name="id" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -547,12 +559,25 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="View_Analytics" ReturnType="Collection(Online_examModel.View_Analytics_Result)" />
+          <FunctionImport Name="VIEW_COURSES" ReturnType="Collection(Online_examModel.VIEW_COURSES_Result)" />
+          <FunctionImport Name="VIEW_COURSES_BYID" ReturnType="Collection(Online_examModel.VIEW_COURSES_BYID_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="View_Exams" ReturnType="Collection(Online_examModel.View_Exams_Result)" />
+          <FunctionImport Name="View_Exams_BYID" ReturnType="Collection(Online_examModel.View_Exams_BYID_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="View_Questions_ByExam" ReturnType="Collection(Online_examModel.View_Questions_ByExam_Result)">
-          <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="View_Questions_ByID" ReturnType="Collection(Online_examModel.View_Questions_ByID_Result)">
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="View_Results_ByExam" ReturnType="Collection(Online_examModel.View_Results_ByExam_Result)">
+            <Parameter Name="e_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ViewAll_Results_ByExam" ReturnType="Collection(Online_examModel.ViewAll_Results_ByExam_Result)" />
         </EntityContainer>
         <ComplexType Name="GET_FEEDBACK1_Result">
           <Property Type="Int32" Name="s_id" Nullable="false" />
@@ -561,46 +586,6 @@
           <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
           <Property Type="Int32" Name="level" Nullable="true" />
           <Property Type="String" Name="feedback" Nullable="true" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="VIEW_COURSES_Result">
-          <Property Type="Int32" Name="course_id" Nullable="false" />
-          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
-        </ComplexType>
-        <ComplexType Name="View_Exams_Result">
-          <Property Type="Int32" Name="Course_id" Nullable="true" />
-          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
-          <Property Type="Decimal" Name="Exam_id" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Int32" Name="level" Nullable="true" />
-          <Property Type="Int32" Name="time" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="View_Results_ByExam_Result">
-          <Property Type="Decimal" Name="e_id" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Int32" Name="Course_id" Nullable="false" />
-          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="s_id" Nullable="false" />
-          <Property Type="String" Name="Fullname" Nullable="false" MaxLength="255" />
-          <Property Type="String" Name="Result" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="level" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="ViewAll_Results_ByExam_Result">
-          <Property Type="Decimal" Name="e_id" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Int32" Name="Course_id" Nullable="false" />
-          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="s_id" Nullable="false" />
-          <Property Type="String" Name="Fullname" Nullable="false" MaxLength="255" />
-          <Property Type="String" Name="Result" Nullable="false" MaxLength="255" />
-          <Property Type="Int32" Name="level" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="VIEW_COURSES_BYID_Result">
-          <Property Type="Int32" Name="course_id" Nullable="false" />
-          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
-        </ComplexType>
-        <ComplexType Name="View_Exams_BYID_Result">
-          <Property Type="Int32" Name="Course_id" Nullable="true" />
-          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
-          <Property Type="Decimal" Name="Exam_id" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Int32" Name="level" Nullable="true" />
-          <Property Type="Int32" Name="time" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -612,6 +597,36 @@
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="View_Analytics_Result">
+          <Property Type="Int32" Name="No_Of_Students" Nullable="true" />
+          <Property Type="Int32" Name="No_Of_Exams" Nullable="true" />
+          <Property Type="Int32" Name="No_Of_Courses" Nullable="true" />
+          <Property Type="Int32" Name="No_Of_ExamsTaken" Nullable="true" />
+          <Property Type="Int32" Name="No_Of_Feedbacks" Nullable="true" />
+          <Property Type="Int32" Name="No_Of_Questions" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="VIEW_COURSES_Result">
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="VIEW_COURSES_BYID_Result">
+          <Property Type="Int32" Name="course_id" Nullable="false" />
+          <Property Type="String" Name="course_name" Nullable="false" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="View_Exams_Result">
+          <Property Type="Int32" Name="Course_id" Nullable="true" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="Exam_id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+          <Property Type="Int32" Name="time" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="View_Exams_BYID_Result">
+          <Property Type="Int32" Name="Course_id" Nullable="true" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="Exam_id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+          <Property Type="Int32" Name="time" Nullable="true" />
         </ComplexType>
         <ComplexType Name="View_Questions_ByExam_Result">
           <Property Type="Int32" Name="Q_no" Nullable="false" />
@@ -633,12 +648,30 @@
           <Property Type="String" Name="Correct_ans" Nullable="false" MaxLength="255" />
           <Property Type="Decimal" Name="e_id" Nullable="false" Precision="18" Scale="0" />
         </ComplexType>
+        <ComplexType Name="View_Results_ByExam_Result">
+          <Property Type="Decimal" Name="e_id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="Course_id" Nullable="false" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="s_id" Nullable="false" />
+          <Property Type="String" Name="Fullname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Result" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ViewAll_Results_ByExam_Result">
+          <Property Type="Decimal" Name="e_id" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="Course_id" Nullable="false" />
+          <Property Type="String" Name="Course_name" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="s_id" Nullable="false" />
+          <Property Type="String" Name="Fullname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Result" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="level" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Online_examModelStoreContainer" CdmEntityContainer="Online_examEntities">
+        <EntityContainerMapping StorageEntityContainer="Online_examModelStoreContainer" CdmEntityContainer="Online_examEntities3">
           <EntitySetMapping Name="Admins">
             <EntityTypeMapping TypeName="Online_examModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
@@ -727,6 +760,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Online_examModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GET_FEEDBACK1" FunctionName="Online_examModel.Store.GET_FEEDBACK1">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Online_examModel.GET_FEEDBACK1_Result">
@@ -736,70 +780,6 @@
                 <ScalarProperty Name="Course_name" ColumnName="Course_name" />
                 <ScalarProperty Name="level" ColumnName="level" />
                 <ScalarProperty Name="feedback" ColumnName="feedback" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="VIEW_COURSES" FunctionName="Online_examModel.Store.VIEW_COURSES">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
-                <ScalarProperty Name="course_id" ColumnName="course_id" />
-                <ScalarProperty Name="course_name" ColumnName="course_name" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="View_Exams" FunctionName="Online_examModel.Store.View_Exams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.View_Exams_Result">
-                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
-                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
-                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
-                <ScalarProperty Name="level" ColumnName="level" />
-                <ScalarProperty Name="time" ColumnName="time" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="View_Results_ByExam" FunctionName="Online_examModel.Store.View_Results_ByExam">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.View_Results_ByExam_Result">
-                <ScalarProperty Name="e_id" ColumnName="e_id" />
-                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
-                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
-                <ScalarProperty Name="s_id" ColumnName="s_id" />
-                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
-                <ScalarProperty Name="Result" ColumnName="Result" />
-                <ScalarProperty Name="level" ColumnName="level" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ViewAll_Results_ByExam" FunctionName="Online_examModel.Store.ViewAll_Results_ByExam">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.ViewAll_Results_ByExam_Result">
-                <ScalarProperty Name="e_id" ColumnName="e_id" />
-                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
-                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
-                <ScalarProperty Name="s_id" ColumnName="s_id" />
-                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
-                <ScalarProperty Name="Result" ColumnName="Result" />
-                <ScalarProperty Name="level" ColumnName="level" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="VIEW_COURSES_BYID" FunctionName="Online_examModel.Store.VIEW_COURSES_BYID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_BYID_Result">
-                <ScalarProperty Name="course_id" ColumnName="course_id" />
-                <ScalarProperty Name="course_name" ColumnName="course_name" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="View_Exams_BYID" FunctionName="Online_examModel.Store.View_Exams_BYID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="Online_examModel.View_Exams_BYID_Result">
-                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
-                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
-                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
-                <ScalarProperty Name="level" ColumnName="level" />
-                <ScalarProperty Name="time" ColumnName="time" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -827,6 +807,56 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Online_examModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Online_examModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="View_Analytics" FunctionName="Online_examModel.Store.View_Analytics">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Analytics_Result">
+                <ScalarProperty Name="No_Of_Students" ColumnName="No_Of_Students" />
+                <ScalarProperty Name="No_Of_Exams" ColumnName="No_Of_Exams" />
+                <ScalarProperty Name="No_Of_Courses" ColumnName="No_Of_Courses" />
+                <ScalarProperty Name="No_Of_ExamsTaken" ColumnName="No_Of_ExamsTaken" />
+                <ScalarProperty Name="No_Of_Feedbacks" ColumnName="No_Of_Feedbacks" />
+                <ScalarProperty Name="No_Of_Questions" ColumnName="No_Of_Questions" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VIEW_COURSES" FunctionName="Online_examModel.Store.VIEW_COURSES">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_Result">
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VIEW_COURSES_BYID" FunctionName="Online_examModel.Store.VIEW_COURSES_BYID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.VIEW_COURSES_BYID_Result">
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="View_Exams" FunctionName="Online_examModel.Store.View_Exams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Exams_Result">
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="level" ColumnName="level" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="View_Exams_BYID" FunctionName="Online_examModel.Store.View_Exams_BYID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Exams_BYID_Result">
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="level" ColumnName="level" />
+                <ScalarProperty Name="time" ColumnName="time" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="View_Questions_ByExam" FunctionName="Online_examModel.Store.View_Questions_ByExam">
             <ResultMapping>
               <ComplexTypeMapping TypeName="Online_examModel.View_Questions_ByExam_Result">
@@ -852,6 +882,32 @@
                 <ScalarProperty Name="Option4" ColumnName="Option4" />
                 <ScalarProperty Name="Correct_ans" ColumnName="Correct_ans" />
                 <ScalarProperty Name="e_id" ColumnName="e_id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="View_Results_ByExam" FunctionName="Online_examModel.Store.View_Results_ByExam">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Results_ByExam_Result">
+                <ScalarProperty Name="e_id" ColumnName="e_id" />
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+                <ScalarProperty Name="s_id" ColumnName="s_id" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="level" ColumnName="level" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ViewAll_Results_ByExam" FunctionName="Online_examModel.Store.ViewAll_Results_ByExam">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.ViewAll_Results_ByExam_Result">
+                <ScalarProperty Name="e_id" ColumnName="e_id" />
+                <ScalarProperty Name="Course_id" ColumnName="Course_id" />
+                <ScalarProperty Name="Course_name" ColumnName="Course_name" />
+                <ScalarProperty Name="s_id" ColumnName="s_id" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="level" ColumnName="level" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
