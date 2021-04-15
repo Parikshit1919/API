@@ -264,6 +264,9 @@
     <Compile Include="Models\View_Questions_ByID_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\View_Results_ByEmail_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\View_Results_ByExam_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

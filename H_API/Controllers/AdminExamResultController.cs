@@ -40,11 +40,22 @@ namespace H_API.Controllers
 
         }
 
+        //METHOD TO GET RESULTS BY STUDENT ID
         [HttpGet]
         [Route("api/AdminExamResult/ByStudent")]
         public IHttpActionResult get_by_student_ID(int id)
         {
             var results = db.View_Results_ByStudent(id);
+            return Ok(results);
+
+        }
+
+        //METHOD TO GET RESUTLS BY STUDENT EMAIL
+        [HttpGet]
+        [Route("api/AdminExamResult/ByEmail")]
+        public IHttpActionResult get_by_student_Email(string email)
+        {
+            var results = db.View_Results_ByEmail(email);
             return Ok(results);
 
         }
