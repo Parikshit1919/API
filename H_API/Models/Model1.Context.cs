@@ -227,5 +227,14 @@ namespace H_API.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Results_ByEmail_Result>("View_Results_ByEmail", emailParameter);
         }
+    
+        public virtual ObjectResult<View_Student_ByEmail_Result> View_Student_ByEmail(string email)
+        {
+            var emailParameter = email != null ?
+                new ObjectParameter("email", email) :
+                new ObjectParameter("email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<View_Student_ByEmail_Result>("View_Student_ByEmail", emailParameter);
+        }
     }
 }

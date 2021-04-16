@@ -249,6 +249,9 @@
         <Function Name="View_Results_ByStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
+        <Function Name="View_Student_ByEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="ViewAll_Results_ByExam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Online_examModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
@@ -587,6 +590,9 @@
           <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="View_Results_ByEmail" ReturnType="Collection(Online_examModel.View_Results_ByEmail_Result)">
+          <Parameter Name="email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="View_Student_ByEmail" ReturnType="Collection(Online_examModel.View_Student_ByEmail_Result)">
             <Parameter Name="email" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -694,6 +700,18 @@
           <Property Type="String" Name="Fullname" Nullable="false" MaxLength="255" />
           <Property Type="String" Name="Result" Nullable="false" MaxLength="255" />
           <Property Type="Int32" Name="level" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="View_Student_ByEmail_Result">
+          <Property Type="Int32" Name="Student_id" Nullable="false" />
+          <Property Type="String" Name="Fullname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Student_Email" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Student_Password" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Mobile" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="DOB" Nullable="false" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Qualification" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="Year_of_completion" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -963,6 +981,22 @@
                 <ScalarProperty Name="Fullname" ColumnName="Fullname" />
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="level" ColumnName="level" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="View_Student_ByEmail" FunctionName="Online_examModel.Store.View_Student_ByEmail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Online_examModel.View_Student_ByEmail_Result">
+                <ScalarProperty Name="Student_id" ColumnName="Student_id" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="Student_Email" ColumnName="Student_Email" />
+                <ScalarProperty Name="Student_Password" ColumnName="Student_Password" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+                <ScalarProperty Name="Year_of_completion" ColumnName="Year_of_completion" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
