@@ -10,7 +10,7 @@ using H_API.Models;
 namespace H_API.Controllers
 {
     public class QuestionsController : ApiController
-    {
+    {   
         //CREATE ENTITIY OBJECT
         Online_examEntities db = new Online_examEntities();
 
