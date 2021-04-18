@@ -67,26 +67,37 @@ namespace H_API.Controllers
             }
         }
 
-
+        
+   
 
         [Route("api/Results/GetResults")]
         [HttpPost]
         public IHttpActionResult Post( Answers[] answers)
         {
-            var questions = db.View_Questions_ByExam(answers[0].e_id);
-            double score=0;
+            double score = 0;
             int index = 0;
-            int no_of_questions=0;
+            int no_of_questions = 0;
+           
+            var questions = db.View_Questions_ByExam(answers[0].e_id).ToList();
+            no_of_questions = questions.Count();
            foreach(var i in questions)
             {
-                if(i.Correct_ans==answers[index].answerSelected)    
+                try
                 {
-                    score += 1;
+                    if (i.Correct_ans == answers[index].answerSelected)
+                    {
+                        score += 1;
+                    }
+                }
+                catch(IndexOutOfRangeException)
+                {
+
+                    goto cal;
                 }
                 index += 1;
-                no_of_questions += 1;
+                
             }
-            score = (score / no_of_questions) * 100;
+            cal:  score = (score / no_of_questions) * 100;
             score = Math.Round(score);
             db.Results.Add(new Result()
             {
