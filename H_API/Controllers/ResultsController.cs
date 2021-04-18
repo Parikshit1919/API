@@ -74,7 +74,7 @@ namespace H_API.Controllers
         public IHttpActionResult Post( Answers[] answers)
         {
             var questions = db.View_Questions_ByExam(answers[0].e_id);
-            float score=0;
+            double score=0;
             int index = 0;
             int no_of_questions=0;
            foreach(var i in questions)
@@ -87,6 +87,7 @@ namespace H_API.Controllers
                 no_of_questions += 1;
             }
             score = (score / no_of_questions) * 100;
+            score = Math.Round(score);
             db.Results.Add(new Result()
             {
                 Result1 = score.ToString(),
