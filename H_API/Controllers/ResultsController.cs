@@ -12,6 +12,7 @@ namespace H_API.Controllers
     {
         //CREATE ENTITIY OBJECT
         Online_examEntities db = new Online_examEntities();
+
         [Route("api/Results/CheckEligible")]
         [HttpPost]
         public IHttpActionResult post(Eligibility eligibility)
@@ -23,6 +24,7 @@ namespace H_API.Controllers
             var results = db.ViewAll_Results_ByExam().ToList();
             int exam_id = 0;
             int found = 0;
+            var student_results = new List<int>();
             //FIND THE EXAM ID OF THE PREVIOUS LEVEL
             foreach (var i in results)
             {
@@ -33,17 +35,31 @@ namespace H_API.Controllers
                     break;
                 }
             }
+            //SELECT THE REUSLTS FOR THAT PREVIOUS LEVEL
             foreach(var i in results)
             {
                 if(i.s_id==eligibility.s_id && i.e_id== exam_id)
                 {
                     found = 1;
-                    break;
+                    student_results.Add(Convert.ToInt32(i.Result));
                 }
             }
+            //CHECK THE SCORES FOR THE PREVIOUS LEVEL
+            
             if(found==1)
-            {
-                return Ok("valid");
+            {   
+                //IF SCORE IS >=65 valid
+                int max = student_results.Max();
+                if(max>=65)
+                {
+                    return Ok("valid");
+                }
+                else
+                {
+                    return Ok("error");
+                }
+
+               
             }
             else
             {
