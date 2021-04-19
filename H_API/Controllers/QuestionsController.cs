@@ -100,6 +100,7 @@ namespace H_API.Controllers
             }
         }
 
+        //METHOD TO UPLOAD EXCEL
         [Route("api/questionbyexcel/")]
         [HttpPost]
         public string ExcelUpload()

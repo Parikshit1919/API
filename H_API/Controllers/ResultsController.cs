@@ -84,7 +84,7 @@ namespace H_API.Controllers
             {
                 try
                 {
-                    if (i.Correct_ans == answers[index].answerSelected)
+                    if (i.Correct_ans.ToLower() == answers[index].answerSelected.ToLower())
                     {
                         score += 1;
                     }
