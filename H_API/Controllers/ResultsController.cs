@@ -69,7 +69,7 @@ namespace H_API.Controllers
 
         
    
-
+        //METHOD TO CALCULATE THE RESULTS FOR ANSWERS SUBMITTED
         [Route("api/Results/GetResults")]
         [HttpPost]
         public IHttpActionResult Post( Answers[] answers)
@@ -82,11 +82,15 @@ namespace H_API.Controllers
             no_of_questions = questions.Count();
            foreach(var i in questions)
             {
+                
                 try
                 {
-                    if (i.Correct_ans.ToLower() == answers[index].answerSelected.ToLower())
+                    if (answers[index].answerSelected != null)
                     {
-                        score += 1;
+                        if (i.Correct_ans.ToLower() == answers[index].answerSelected.ToLower())
+                        {
+                            score += 1;
+                        }
                     }
                 }
                 catch(IndexOutOfRangeException)
@@ -97,6 +101,7 @@ namespace H_API.Controllers
                 index += 1;
                 
             }
+
             cal:  score = (score / no_of_questions) * 100;
             score = Math.Round(score);
             db.Results.Add(new Result()
