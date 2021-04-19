@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
+using ExcelDataReader;
 using H_API.Models;
 
 namespace H_API.Controllers
@@ -95,6 +99,66 @@ namespace H_API.Controllers
                 return Ok("error");
             }
         }
+
+        [Route("api/questionbyexcel/")]
+        [HttpPost]
+        public string ExcelUpload()
+        {
+            string message = "";
+            HttpResponseMessage result = null;
+            var httpRequest = HttpContext.Current.Request;
+            if (httpRequest.Files.Count > 0)
+            {
+                HttpPostedFile file = httpRequest.Files[0];
+                Stream stream = file.InputStream;
+                IExcelDataReader reader = null;
+                if (file.FileName.EndsWith(".xls"))
+                {
+                    reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                }
+                else if (file.FileName.EndsWith(".xlsx"))
+                {
+                    reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                }
+                else
+                {
+                    message = "This file format is not supported";
+                }
+                DataSet excelRecords = reader.AsDataSet();
+                reader.Close();
+                string temp;
+                var finalRecords = excelRecords.Tables[0];
+                for (int i = 0; i < finalRecords.Rows.Count; i++)
+                {
+                    Question question = new Question();
+                    question.Question1 = finalRecords.Rows[i][0].ToString();
+                    question.Option1 = finalRecords.Rows[i][1].ToString();
+                    question.Option2 = finalRecords.Rows[i][2].ToString();
+                    question.Option3 = finalRecords.Rows[i][3].ToString();
+                    question.Option4 = finalRecords.Rows[i][4].ToString();
+                    question.Correct_ans = finalRecords.Rows[i][5].ToString();
+                    question.e_id = Convert.ToDecimal(finalRecords.Rows[i][6]);
+
+                    db.Questions.Add(question);
+                }
+                int output = db.SaveChanges();
+                if (output > 0)
+                {
+                    message = "success";
+                }
+                else
+                {
+                    message = "Excel file uploaded has fiald";
+                }
+            }
+            else
+            {
+                result = Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+            return message;
+        }
+
+
     }
-    
+
 }
